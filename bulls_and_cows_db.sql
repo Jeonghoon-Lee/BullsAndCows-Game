@@ -6,6 +6,7 @@ use guessNumberDB;
 create table game (
 	gameId int auto_increment primary key,
 	answer int not null,
+    currentRoundNumber int default(0),
     status tinyint default(0)
 )
 ;
