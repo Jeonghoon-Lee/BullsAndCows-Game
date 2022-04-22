@@ -13,6 +13,7 @@ create table game (
 
 create table round (
 	roundId int auto_increment primary key,
+    roundNumber int not null,
     guess int not null,
     gameId int not null,
     --
@@ -24,5 +25,5 @@ create table round (
 -- insert into game (gameId, answer) values (1, 1234);
 -- select * from game;
 
--- insert into round (guess, gameId) values (1234, 1);
+-- insert into round (guess, gameId, roundNumber) values (1234, 1, 1);
 -- select * from round;
