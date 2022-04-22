@@ -9,14 +9,14 @@ import java.util.List;
  * gitRepo: https://github.com/gedegithub/C223-JavaDev.git 
  * Design of an interface defining ... on month day, year
  */
-public interface Dao {
+public interface GameDao {
 
     Game add(Game game);
-    Round add(Round round);
+   
     
     List<Game>getAllGames();
-    List<Round>getAllRounds();
+    
     
     Game getGameById(int id);
-    Round getRoundById(int id);
+   
 }
