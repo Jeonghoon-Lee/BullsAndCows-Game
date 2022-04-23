@@ -5,16 +5,17 @@ use guessNumberDB;
 
 create table game (
 	gameId int auto_increment primary key,
-	answer int not null,
+	answer char(4) not null,
     currentRoundNumber int default(0),
-    status tinyint default(0)
+    finished tinyint default(0)
 )
 ;
 
 create table round (
 	roundId int auto_increment primary key,
     roundNumber int not null,
-    guess int not null,
+    guess char(4) not null,
+    result char(7) not null,
     gameId int not null,
     --
     constraint fk_game_round foreign key (gameId) references game(gameId)
