@@ -54,6 +54,10 @@ public class BullsAndCowsGameServiceImpl implements BullsAndCowsGameService {
     public Round guessNumber(Round round) {
         Game game = gameDao.getGameById(round.getGame().getGameId());
 
+        if (game == null) {
+            return null;
+        }
+
         // increase round number in game
         game.setCurrentRoundNumber(game.getCurrentRoundNumber() + 1);
 
