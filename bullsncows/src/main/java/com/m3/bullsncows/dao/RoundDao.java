@@ -1,5 +1,6 @@
 package com.m3.bullsncows.dao;
 
+import com.m3.bullsncows.dto.Game;
 import com.m3.bullsncows.dto.Round;
 import java.util.List;
 
@@ -13,6 +14,11 @@ public interface RoundDao {
     Round add(Round round);
 
     List<Round> getAllRounds();
+
+    // added by JH
+    Round add(Game game, Round round);
+
+    List<Round> getAllRoundsByGameId(int gameId);
 
     Round getRoundById(int id);
 }

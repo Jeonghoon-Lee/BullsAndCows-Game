@@ -4,12 +4,14 @@ import com.m3.bullsncows.dto.Game;
 import com.m3.bullsncows.dto.Round;
 import java.util.List;
 import java.util.ArrayList;
+import org.springframework.stereotype.Repository;
 
 /**
  * @author Ronald Gedeon; email: gedemarcel0002@hotmail.com; gitRepo:
  * https://github.com/gedegithub/C223-JavaDev.git Design of a class ... on month
  * day, year
  */
+@Repository
 public class GameInMemoryDao implements GameDao {
 
     private static final List<Game> games = new ArrayList<>();

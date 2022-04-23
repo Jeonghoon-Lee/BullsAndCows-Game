@@ -1,14 +1,17 @@
 package com.m3.bullsncows.dto;
 
 /**
- * @author Ronald Gedeon; email: gedemarcel0002@hotmail.com;  
- * gitRepo: https://github.com/gedegithub/C223-JavaDev.git 
+ * @author Ronald Gedeon; email: gedemarcel0002@hotmail.com;
+ * gitRepo: https://github.com/gedegithub/C223-JavaDev.git
  * Design of a class ... on month day, year
  */
 public class Round {
     private int roundId;
     private int roundNumber;
     private int guess;
+
+    // JH
+    private Game game;
 
     public int getRoundId() {
         return roundId;
@@ -33,5 +36,13 @@ public class Round {
     public void setGuess(int guess) {
         this.guess = guess;
     }
-    
+
+    public Game getGame() {
+        return game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
+    }
+
 }
