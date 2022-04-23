@@ -1,10 +1,10 @@
+com\m3\bullsncows\services\BullsAndCowsGameServiceImpl.class
+com\m3\bullsncows\dao\GameDao.class
+com\m3\bullsncows\dao\RoundInMemoryDao.class
 com\m3\bullsncows\App.class
 com\m3\bullsncows\controllers\GameController.class
 com\m3\bullsncows\dao\GameInMemoryDao.class
 com\m3\bullsncows\dao\RoundDao.class
 com\m3\bullsncows\services\BullsAndCowsGameService.class
-com\m3\bullsncows\services\BullsAndCowsGameServiceImpl.class
-com\m3\bullsncows\dao\GameDao.class
-com\m3\bullsncows\dao\RoundInMemoryDao.class
 com\m3\bullsncows\dto\Round.class
 com\m3\bullsncows\dto\Game.class

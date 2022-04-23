@@ -5,6 +5,7 @@ import com.m3.bullsncows.dto.Round;
 import java.util.ArrayList;
 import java.util.List;
 import static java.util.stream.Collectors.toList;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Repository;
  * Design of a class ... on month day, year
  */
 @Repository
+@Profile("memory")
 public class RoundInMemoryDao implements RoundDao {
 
     private static final List<Round> rounds = new ArrayList<>();

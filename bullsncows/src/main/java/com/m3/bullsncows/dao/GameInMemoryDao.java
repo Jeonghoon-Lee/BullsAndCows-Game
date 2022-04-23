@@ -4,6 +4,7 @@ import com.m3.bullsncows.dto.Game;
 import com.m3.bullsncows.dto.Round;
 import java.util.List;
 import java.util.ArrayList;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Repository;
  * day, year
  */
 @Repository
+@Profile("memory")
 public class GameInMemoryDao implements GameDao {
 
     private static final List<Game> games = new ArrayList<>();
@@ -40,6 +42,11 @@ public class GameInMemoryDao implements GameDao {
                 .filter(i -> i.getGameId() == id)
                 .findFirst()
                 .orElse(null);
+    }
+
+    @Override
+    public boolean update(Game game) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 }

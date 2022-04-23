@@ -1,16 +1,24 @@
 package com.m3.bullsncows.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize.Inclusion;
+
 /**
  * @author Ronald Gedeon; email: gedemarcel0002@hotmail.com;
  * gitRepo: https://github.com/gedegithub/C223-JavaDev.git
  * Design of a class ... on month day, year
  */
 public class Round {
-    private int roundId;
-    private int roundNumber;
-    private int guess;
 
-    // JH
+    @JsonIgnore
+    private int roundId;
+
+    private int roundNumber;
+    private String guess;
+    private String result;
+
+    @JsonSerialize(include = Inclusion.NON_NULL)
     private Game game;
 
     public int getRoundId() {
@@ -29,12 +37,20 @@ public class Round {
         this.roundNumber = roundNumber;
     }
 
-    public int getGuess() {
+    public String getGuess() {
         return guess;
     }
 
-    public void setGuess(int guess) {
+    public void setGuess(String guess) {
         this.guess = guess;
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
     }
 
     public Game getGame() {

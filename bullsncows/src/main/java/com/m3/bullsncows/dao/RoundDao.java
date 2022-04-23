@@ -13,12 +13,14 @@ public interface RoundDao {
 
     Round add(Round round);
 
+    // don't need
     List<Round> getAllRounds();
 
-    // added by JH
+    // don't need
     Round add(Game game, Round round);
 
     List<Round> getAllRoundsByGameId(int gameId);
 
+    // don't need
     Round getRoundById(int id);
 }

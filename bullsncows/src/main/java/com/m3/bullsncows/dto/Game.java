@@ -1,15 +1,20 @@
 package com.m3.bullsncows.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 /**
- * @author Ronald Gedeon; email: gedemarcel0002@hotmail.com;  
- * gitRepo: https://github.com/gedegithub/C223-JavaDev.git 
+ * @author Ronald Gedeon; email: gedemarcel0002@hotmail.com;
+ * gitRepo: https://github.com/gedegithub/C223-JavaDev.git
  * Design of a class ... on month day, year
  */
 public class Game {
     private int gameId;
     private int currentRoundNumber;
-    private int answer;
-    private boolean status;
+
+    @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+    private String answer;
+
+    private boolean finished;
 
     public int getGameId() {
         return gameId;
@@ -27,20 +32,24 @@ public class Game {
         this.currentRoundNumber = currentRoundNumber;
     }
 
-    public int getAnswer() {
+    public void increaseRoundNumber() {
+        this.currentRoundNumber++;
+    }
+
+    public String getAnswer() {
         return answer;
     }
 
-    public void setAnswer(int answer) {
+    public void setAnswer(String answer) {
         this.answer = answer;
     }
 
-    public boolean isStatus() {
-        return status;
+    public boolean getFinished() {
+        return finished;
     }
 
-    public void setStatus(boolean status) {
-        this.status = status;
+    public void setFinished(boolean finished) {
+        this.finished = finished;
     }
 
 }

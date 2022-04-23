@@ -16,7 +16,7 @@ public interface BullsAndCowsGameService {
 
     List<Game> getAllGames();
 
-    int beginGame();
+    Game beginGame();
 
     Round guessNumber(Round round);
 

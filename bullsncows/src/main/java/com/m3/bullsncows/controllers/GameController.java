@@ -37,22 +37,17 @@ public class GameController {
 
     @PostMapping("/begin")
     @ResponseStatus(HttpStatus.CREATED)
-    public int beginGame() {
+    public Game beginGame() {
         return service.beginGame();
     }
 
     @PostMapping("/guess")
-    public Round makeGuess(@RequestBody Round round) {
+    public ResponseEntity<Round> makeGuess(@RequestBody Round round) {
         Round result = service.guessNumber(round);
-//        return result;
-
-        // this for testing
-//        System.out.println(round.getGuess());
-//        System.out.println(round.getGame().getGameId());
-
-        // TODO:
-        // need to modify game id processing.
-        return result;
+        if (result == null) {
+            return new ResponseEntity(null, HttpStatus.BAD_REQUEST);
+        }
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/game/{gameId}")
