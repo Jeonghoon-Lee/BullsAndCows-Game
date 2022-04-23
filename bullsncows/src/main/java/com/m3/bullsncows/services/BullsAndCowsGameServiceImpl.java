@@ -8,6 +8,9 @@ import com.m3.bullsncows.dto.Game;
 import com.m3.bullsncows.dto.Round;
 import com.m3.bullsncows.dao.GameDao;
 import com.m3.bullsncows.dao.RoundDao;
+import com.m3.bullsncows.exceptions.GameFinishedException;
+import com.m3.bullsncows.exceptions.GameNotFoundException;
+import com.m3.bullsncows.exceptions.InvalidRequestParametersException;
 
 import java.util.List;
 import java.util.Random;
@@ -57,11 +60,24 @@ public class BullsAndCowsGameServiceImpl implements BullsAndCowsGameService {
     @Override
     @Transactional
     public Round guessNumber(Round round) {
+
+        // check if request is valid
+        if (round.getGame() == null) {
+            throw new InvalidRequestParametersException("Invalid parameters - Missing game id");
+        }
+        if (round.getGuess() == null || round.getGuess().length() != 4) {
+            throw new InvalidRequestParametersException("Guess number should be 4 digit number.");
+        }
+
         Game currentGame = gameDao.getGameById(round.getGame().getGameId());
 
-        // check if game number exists.
+        // check if game id exists.
         if (currentGame == null) {
-            return null;
+            throw new GameNotFoundException(round.getGame().getGameId());
+        }
+        // check if game was finished
+        if (currentGame.getFinished()) {
+            throw new GameFinishedException(currentGame.getGameId());
         }
 
         // increase round number in game
@@ -96,11 +112,21 @@ public class BullsAndCowsGameServiceImpl implements BullsAndCowsGameService {
 
         foundGame = hideAnswer(foundGame);
 
+        // check if game id exists.
+        if (foundGame == null) {
+            throw new GameNotFoundException(gameId);
+        }
+
         return foundGame;
     }
 
     @Override
     public List<Round> getRoundsByGameId(int gameId) {
+        // check if game id exists.
+        if (gameDao.getGameById(gameId) == null) {
+            throw new GameNotFoundException(gameId);
+        }
+
         return roundDao.getAllRoundsByGameId(gameId);
     }
 

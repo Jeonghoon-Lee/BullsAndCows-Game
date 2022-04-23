@@ -13,6 +13,7 @@ import java.sql.Statement;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -61,7 +62,12 @@ public class GameDatabaseDao implements GameDao {
     public Game getGameById(int id) {
         final String SQL = "SELECT * FROM game WHERE gameId = ?;";
 
-        return jdbcTemplate.queryForObject(SQL, new GameMapper(), id);
+        // game id not exist
+        try {
+            return jdbcTemplate.queryForObject(SQL, new GameMapper(), id);
+        } catch (EmptyResultDataAccessException ex) {
+            return null;
+        }
     }
 
     @Override
