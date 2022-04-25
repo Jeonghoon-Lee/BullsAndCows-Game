@@ -3,14 +3,14 @@ package com.m3.bullsncows.dto;
 import org.springframework.stereotype.Component;
 
 /**
- * @author Ronald Gedeon; email: gedemarcel0002@hotmail.com;  
- * gitRepo: https://github.com/gedegithub/C223-JavaDev.git 
+ * @author Ronald Gedeon; email: gedemarcel0002@hotmail.com;
+ * gitRepo: https://github.com/gedegithub/C223-JavaDev.git
  * Design of a class ... on month day, year
  */
 @Component
 public class GuessModel {
     private int id;
-    private String stringifyNumber;
+    private String guess;
 
     public int getId() {
         return id;
@@ -20,12 +20,12 @@ public class GuessModel {
         this.id = id;
     }
 
-    public String getStringifyNumber() {
-        return stringifyNumber;
+    public String getGuess() {
+        return guess;
     }
 
-    public void setStringifyNumber(String stringifyNumber) {
-        this.stringifyNumber = stringifyNumber;
+    public void setGuess(String guess) {
+        this.guess = guess;
     }
-    
+
 }

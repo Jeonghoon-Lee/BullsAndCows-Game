@@ -27,12 +27,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class GameController {
 
     private BullsAndCowsGameService service;
-    private GuessModel guess;
+//    private GuessModel guess;
 
     @Autowired
     public GameController(BullsAndCowsGameService service, GuessModel guess) {
         this.service = service;
-        this.guess = guess;
+//        this.guess = guess;
     }
 
     @PostMapping("/begin")
@@ -44,7 +44,7 @@ public class GameController {
     @PostMapping("/guess")
     @ResponseStatus(HttpStatus.CREATED)
     public Optional<Round> makeGuess(@RequestBody @NonNull GuessModel guessModel) {
-        return service.guessNumber(guessModel.getId(), guessModel.getStringifyNumber());
+        return service.guessNumber(guessModel.getId(), guessModel.getGuess());
     }
 //    public ResponseEntity<Round> makeGuess(@RequestBody Round round) {
 //        Round result = service.guessNumber(round);

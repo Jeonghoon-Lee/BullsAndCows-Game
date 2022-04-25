@@ -84,4 +84,15 @@ public class GameDaoDB implements GameDao {
             return null;
         }
     }
+
+    @Override
+    public boolean update(Game game) {
+        final String SQL = "UPDATE game SET "
+                + "status = ? "
+                + "WHERE id = ?;";
+
+        return jdbcTemplate.update(SQL,
+                game.getStatus(),
+                game.getId()) > 0;
+    }
 }

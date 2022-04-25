@@ -4,10 +4,11 @@ import com.m3.bullsncows.dto.Game;
 import com.m3.bullsncows.dto.Round;
 import com.m3.bullsncows.dao.GameDao;
 import com.m3.bullsncows.dao.RoundDao;
+import com.m3.bullsncows.exceptions.GameFinishedException;
 import com.m3.bullsncows.exceptions.GameNotFoundException;
+import com.m3.bullsncows.exceptions.InvalidRequestParametersException;
 
 import java.util.List;
-import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Random;
 import static java.util.stream.Collectors.toList;
@@ -24,8 +25,6 @@ public class BullsAndCowsGameServiceImpl implements BullsAndCowsGameService {
     private final GameDao gameDao;
     private final RoundDao roundDao;
 
-    private Random randomizer = new Random();
-
     @Autowired
     public BullsAndCowsGameServiceImpl(GameDao gameDao, RoundDao roundDao) {
         this.gameDao = gameDao;
@@ -34,7 +33,6 @@ public class BullsAndCowsGameServiceImpl implements BullsAndCowsGameService {
 
     @Override
     public Game getGameById(int gameId) {
-//        return gameDao.getGameById(gameId);
         Game foundGame = gameDao.getGameById(gameId);
 
         foundGame = hideAnswer(foundGame);
@@ -49,7 +47,6 @@ public class BullsAndCowsGameServiceImpl implements BullsAndCowsGameService {
 
     @Override
     public List<Game> getAllGames() {
-//        return gameDao.getAllGames();
         return gameDao.getAllGames().stream()
                 .map(game -> hideAnswer(game))
                 .collect(toList());
@@ -64,30 +61,49 @@ public class BullsAndCowsGameServiceImpl implements BullsAndCowsGameService {
         newGame.setStatus("IN PROGRESS");
         newGame = gameDao.add(newGame);
 
-        return newGame;
+        return hideAnswer(newGame);
     }
 
     @Override
     public Optional<Round> guessNumber(int gameId, String guess) {
+        // check if request is valid
+        if (gameId == 0) {
+            throw new InvalidRequestParametersException("Invalid parameters - Missing game id");
+        }
+        if (guess == null || guess.length() != 4) {
+            throw new InvalidRequestParametersException("Guess number should be 4 digit number.");
+        }
 
         Round round = new Round();
         Game game = gameDao.getGameById(gameId);
-        if (game != null) {
-            round.setGuess(guess);
-            round.setGame(game);
 
-            if (game.getAnswer().equals(round.getGuess())) {
-                game.setStatus("FINISHED");
-                game.toString();
-            }
+        // check if game id exists.
+        if (game == null) {
+            throw new GameNotFoundException(gameId);
+        }
+        // check if game was finished
+        if (game.getStatus().equals("FINISHED")) {
+            throw new GameFinishedException(game.getId());
         }
 
-        if (game != null && game.getStatus().equals("IN PROGRESS")) {
-            //String result = checkAnswer(game.getAnswer(), round.getGuess());
-            String result = matchChar(game.getAnswer(), round.getGuess());
+        round.setGuess(guess);
+        round.setGame(game);
+
+        if (game.getAnswer().equals(round.getGuess())) {
+            game.setStatus("FINISHED");
+//            game.toString();
+            round.setResult("e:4:p:0");
+            gameDao.update(game);
+        }
+
+        if (game.getStatus().equals("IN PROGRESS")) {
+            String result = checkAnswer(game.getAnswer(), round.getGuess());
+//            String result = matchChar(game.getAnswer(), round.getGuess());
             round.setResult(result);
         }
         roundDao.add(round);
+
+        round.setGame(hideAnswer(game));
         return Optional.ofNullable(round);
     }
 
@@ -138,8 +154,6 @@ public class BullsAndCowsGameServiceImpl implements BullsAndCowsGameService {
             if (guess.charAt(i) == answer.charAt(i)) {
                 exactMatches++;
             } else if (answer.contains(guess.substring(i, i + 1))) {
-                partialMatches++;
-            } else if(answer.contains(guess.substring(i))) {
                 partialMatches++;
             }
         }
