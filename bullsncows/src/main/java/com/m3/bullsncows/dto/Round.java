@@ -22,14 +22,6 @@ public class Round {
         this.id = id;
     }
 
-//    public int getRoundNumber() {
-//        return roundNumber;
-//    }
-//
-//    public void setRoundNumber(int roundNumber) {
-//        this.roundNumber = roundNumber;
-//    }
-
     public Integer getGuess() {
         return guess;
     }

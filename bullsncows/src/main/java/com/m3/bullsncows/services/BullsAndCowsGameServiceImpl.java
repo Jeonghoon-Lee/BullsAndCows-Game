@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.m3.bullsncows.services;
 
 import com.m3.bullsncows.dto.Game;
@@ -45,21 +41,9 @@ public class BullsAndCowsGameServiceImpl implements BullsAndCowsGameService {
     @Override
     public Game beginGame() {
         Game newGame = new Game();
-        String randString = "";
-
-        // to generate 4 distincts random numbers between 0 inclusive and 4 exclusive
-        List<Integer> randoms = new ArrayList<>(); // Set would be better
-        Random rand = new Random();
-        while (randoms.size() < 5) {
-            Integer gen = rand.nextInt(10);
-            if (!randoms.contains(gen)) {
-                randoms.add(gen);
-            }
-        }
-        for (Integer random : randoms) {
-            randString += random;
-        }
-
+        
+        String randString = newGame.generateRandom();
+        
         newGame.setAnswer(randString);
         newGame.setStatus("IN PROGRESS");
         newGame = gameDao.add(newGame);
@@ -95,11 +79,6 @@ public class BullsAndCowsGameServiceImpl implements BullsAndCowsGameService {
         return roundDao.getAllRoundsByGameId(gameId);
     }
 
-//    public String validateGuess(Round round, Game game) {
-//        String res = "";
-//
-//        return res;
-//    }
     public String matchChar(String answer, String response) {
         String result = "";
         if (answer.equals(response)) {
