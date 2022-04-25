@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
  * Design of a class ... on month day, year
  */
 @Component
-public class Guess {
+public class GuessModel {
     private int id;
     private int number;
 

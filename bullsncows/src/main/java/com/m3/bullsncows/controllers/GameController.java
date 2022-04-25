@@ -1,7 +1,7 @@
 package com.m3.bullsncows.controllers;
 
 import com.m3.bullsncows.dto.Game;
-import com.m3.bullsncows.dto.Guess;
+import com.m3.bullsncows.dto.GuessModel;
 import com.m3.bullsncows.dto.Round;
 import com.m3.bullsncows.services.BullsAndCowsGameService;
 import java.util.List;
@@ -27,10 +27,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class GameController {
 
     private BullsAndCowsGameService service;
-    private Guess guess;
+    private GuessModel guess;
 
     @Autowired
-    public GameController(BullsAndCowsGameService service, Guess guess) {
+    public GameController(BullsAndCowsGameService service, GuessModel guess) {
         this.service = service;
         this.guess = guess;
     }
@@ -43,8 +43,8 @@ public class GameController {
 
     @PostMapping("/guess")
     @ResponseStatus(HttpStatus.CREATED)
-    public Optional<Round> makeGuess(@RequestBody @NonNull Guess guess) {
-        return service.guessNumber(guess.getId(), guess.getNumber());
+    public Optional<Round> makeGuess(@RequestBody @NonNull GuessModel guessModel) {
+        return service.guessNumber(guessModel.getId(), guessModel.getNumber());
     }
     
     @GetMapping("/game")

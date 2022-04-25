@@ -1,4 +1,5 @@
 com\m3\bullsncows\services\BullsAndCowsGameServiceImpl.class
+com\m3\bullsncows\dto\GuessModel.class
 com\m3\bullsncows\dao\GameDao.class
 com\m3\bullsncows\App.class
 com\m3\bullsncows\controllers\GameController.class

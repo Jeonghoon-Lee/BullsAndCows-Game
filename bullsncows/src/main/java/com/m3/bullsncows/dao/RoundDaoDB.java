@@ -1,5 +1,6 @@
 package com.m3.bullsncows.dao;
 
+import com.m3.bullsncows.dao.GameDaoDB.GameMapper;
 import com.m3.bullsncows.dto.Game;
 import com.m3.bullsncows.dto.Round;
 import java.sql.Connection;
@@ -31,7 +32,7 @@ public class RoundDaoDB implements RoundDao {
     }
 
     // specific field which is a intern private static class to RoundDaoDB
-    public static final class GameMapper implements RowMapper<Round> {
+    public static final class RoundMapper implements RowMapper<Round> {
 
         @Override
         public Round mapRow(ResultSet rs, int index) throws SQLException {
@@ -73,7 +74,7 @@ public class RoundDaoDB implements RoundDao {
     public List<Round> getAllRounds() {
         final String sql = "SELECT id, guess, timestamp, result, gameId FROM round;";
         
-        List<Round> rounds = jdbcTemplate.query(sql, new GameMapper());
+        List<Round> rounds = jdbcTemplate.query(sql, new RoundMapper());
         
         for(Round singleRound: rounds)
             getGameForRound(singleRound);
@@ -86,21 +87,21 @@ public class RoundDaoDB implements RoundDao {
         final String sql = "SELECT id, guess, timestamp, result, gameId "
                 + "FROM round WHERE roundId = ?;";
         
-        Round round = jdbcTemplate.queryForObject(sql, new GameMapper(), id);
+        Round round = jdbcTemplate.queryForObject(sql, new RoundMapper(), id);
         getGameForRound(round);
         return round;
     }
 
     @Override
     public List<Round> getAllRoundsByGameId(int gameId) {
-        final String sql = "SELECT r.* FROM round r WHERE r.gameId = ? "
-                + "orger by timestamp";
+        final String sql = "SELECT r.* FROM round r WHERE r.gameId = ? "; //return a []. why?
+              //  + "orger by timestamp";
         
-        return jdbcTemplate.query(sql, new GameMapper(), gameId);
+        return jdbcTemplate.query(sql, new RoundMapper(), gameId);
     }
     
     // not suppose to return Game ?
-    private Round getGameForRound(Round round) {
+    private Game getGameForRound(Round round) {
         final String SELECT_GAME_FOR_ROUND = "SELECT g.* FROM game g "
                 + "JOIN round r ON g.id = r.gameId WHERE r.id = ?";
         return jdbcTemplate.queryForObject(SELECT_GAME_FOR_ROUND, new GameMapper(), round.getId());

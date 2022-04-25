@@ -68,12 +68,13 @@ public class BullsAndCowsGameServiceImpl implements BullsAndCowsGameService {
     }
 
     @Override
-    public Optional<Round> guessNumber(int gameId, Integer guess) {
-    
+    public Optional<Round> guessNumber(int gameId, int guess) {
+
         Round round = new Round();
         Game game = gameDao.getGameById(gameId);
         if (game != null) {
-            round.setGuess(guess);
+            round.setGuess((Integer) guess);
+            round.setGame(game); 
 
             if (game.getAnswer().equals(round.getGuess().toString())) {
                 game.setStatus("FINISHED");
@@ -99,20 +100,21 @@ public class BullsAndCowsGameServiceImpl implements BullsAndCowsGameService {
 //
 //        return res;
 //    }
-
     public String matchChar(String answer, String response) {
         String result = "";
         if (answer.equals(response)) {
-            result = "e e e e";
+            result = "e e e e"; //e: exact
         } else {
-            for (int i = 0; i < answer.length(); i++) {
+            int len = answer.length();
+            for (int i = 0; i < len - 1; i++) { // len -1: to avoid StringIndexOutOfBound
 
                 if (answer.substring(i, i + 1).equals(response.substring(i, i + 1))) {
                     result += "e ";
-                } else if (answer.contains(response.substring(i, i+1))) {
-                    result += "p ";
+                } else if (answer.contains(response.substring(i, i + 1))) {
+                    result += "p "; // p: partial
+                } else if (answer.contains(response.substring(i))) { // to consider the last character in the String
                 } else {
-                    result += "n ";
+                    result += "n "; // n: non-existent
                 }
             }
         }
