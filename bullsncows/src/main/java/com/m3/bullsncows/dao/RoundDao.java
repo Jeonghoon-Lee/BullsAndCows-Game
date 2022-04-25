@@ -1,6 +1,5 @@
 package com.m3.bullsncows.dao;
 
-import com.m3.bullsncows.dto.Game;
 import com.m3.bullsncows.dto.Round;
 import java.util.List;
 

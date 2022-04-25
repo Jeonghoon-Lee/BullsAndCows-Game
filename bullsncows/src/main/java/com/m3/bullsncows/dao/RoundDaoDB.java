@@ -23,8 +23,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class RoundDaoDB implements RoundDao {
 
-    @Autowired
-    private GameDao gameDao;
     private JdbcTemplate jdbcTemplate;
 
     //constructor injection
@@ -96,7 +94,6 @@ public class RoundDaoDB implements RoundDao {
 
     @Override
     public List<Round> getAllRoundsByGameId(int gameId) {
-       // Game game = gameDao.getGameById(gameId);
         final String sql = "SELECT id, guess, timestamp, result, gameId FROM round WHERE round.gameId = ? ";
                // + "orger by time(timestamp)";
         

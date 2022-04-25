@@ -1,6 +1,8 @@
 package com.m3.bullsncows.dto;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * @author Ronald Gedeon; email: gedemarcel0002@hotmail.com;
@@ -22,14 +24,6 @@ public class Game {
         this.id = id;
     }
 
-//    public int getCurrentRoundNumber() {
-//        return currentRoundNumber;
-//    }
-//
-//    public void setCurrentRoundNumber(int currentRoundNumber) {
-//        this.currentRoundNumber = currentRoundNumber;
-//    }
-
     public String getAnswer() {
         return answer;
     }
@@ -46,6 +40,24 @@ public class Game {
         this.status = status;
     }
 
+    public String generateRandom(){
+        
+        // to generate 4 distincts random numbers between 0 inclusive and 4 exclusive
+        String randString = "";
+        List<Integer> randoms = new ArrayList<>(); // Set would be better
+        Random rand = new Random();
+        while (randoms.size() < 4) {
+            Integer gen = rand.nextInt(10);
+            if (!randoms.contains(gen)) {
+                randoms.add(gen);
+            }
+        }
+        for (Integer random : randoms) {
+            randString += random;
+        }
+        return randString;
+    }
+    
     @Override
     public String toString() {
         return "User wins Game{" + "id=" + id + ", answer=" + answer + ", status=" + status + '}';
