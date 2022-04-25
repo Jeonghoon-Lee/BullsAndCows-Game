@@ -27,12 +27,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class GameController {
 
     private BullsAndCowsGameService service;
-//    private GuessModel guess;
 
     @Autowired
     public GameController(BullsAndCowsGameService service, GuessModel guess) {
         this.service = service;
-//        this.guess = guess;
     }
 
     @PostMapping("/begin")

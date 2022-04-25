@@ -12,7 +12,6 @@ public class Round {
 
     @JsonIgnore
     private int id;
-    //private int roundNumber;
     private String guess;
     private LocalDateTime timestamp = LocalDateTime.now();
     private String result;

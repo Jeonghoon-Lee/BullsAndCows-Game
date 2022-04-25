@@ -95,12 +95,12 @@ public class RoundDaoDB implements RoundDao {
     @Override
     public List<Round> getAllRoundsByGameId(int gameId) {
         final String sql = "SELECT id, guess, timestamp, result, gameId FROM round WHERE round.gameId = ? ";
-               // + "orger by time(timestamp)";
+               // + "orger by time(timestamp)"; // timestamp already order for us.
         
         return jdbcTemplate.query(sql, new RoundMapper(), gameId);
     }
     
-    // not suppose to return Game ?
+    // fetch and populate the Game field in Round class
     private Game getGameForRound(Round round) {
         final String SELECT_GAME_FOR_ROUND = "SELECT g.* FROM game g "
                 + "JOIN round r ON g.id = r.gameId WHERE r.id = ?";

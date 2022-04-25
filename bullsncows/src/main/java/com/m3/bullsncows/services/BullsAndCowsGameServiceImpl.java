@@ -10,7 +10,6 @@ import com.m3.bullsncows.exceptions.InvalidRequestParametersException;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 import static java.util.stream.Collectors.toList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -91,7 +90,6 @@ public class BullsAndCowsGameServiceImpl implements BullsAndCowsGameService {
 
         if (game.getAnswer().equals(round.getGuess())) {
             game.setStatus("FINISHED");
-//            game.toString();
             round.setResult("e:4:p:0");
             gameDao.update(game);
         }
@@ -117,6 +115,7 @@ public class BullsAndCowsGameServiceImpl implements BullsAndCowsGameService {
         return roundDao.getAllRoundsByGameId(gameId);
     }
 
+    // alternative method to show a result
     public String matchChar(String answer, String response) {
         String result = "";
         if (answer.equals(response)) {
@@ -150,10 +149,10 @@ public class BullsAndCowsGameServiceImpl implements BullsAndCowsGameService {
         // the correct digit but in the wrong position.
         int partialMatches = 0;
 
-        for (int i = 0; i < guess.length() -1; i++) {
+        for (int i = 0; i < guess.length(); i++) {
             if (guess.charAt(i) == answer.charAt(i)) {
                 exactMatches++;
-            } else if (answer.contains(guess.substring(i, i + 1))) {
+            } else if (answer.contains(guess.substring(i, i + 1)) || answer.contains(guess.substring(i))) {
                 partialMatches++;
             }
         }

@@ -11,7 +11,7 @@ create table game (
 
 create table round (
 	id int primary key auto_increment,
-    guess int not null,
+    guess VARCHAR(15) not null,
     `timestamp` DATETIME,
     result VARCHAR(15),
     gameId int not null,

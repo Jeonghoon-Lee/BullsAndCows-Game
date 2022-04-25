@@ -11,7 +11,6 @@ import java.util.Random;
  */
 public class Game {
     private int id;
-    // private int currentRoundNumber;
     @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
     private String answer;
     private String status = "IN PROGRESS";
