@@ -1,16 +1,15 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.m3.bullsncows.controllers;
 
 import com.m3.bullsncows.dto.Game;
+import com.m3.bullsncows.dto.Guess;
 import com.m3.bullsncows.dto.Round;
 import com.m3.bullsncows.services.BullsAndCowsGameService;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,35 +23,33 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Jeonghoon
  */
 @RestController
-@RequestMapping("/bulls-and-cows")
+@RequestMapping("/bullsncows")
 public class GameController {
 
-    @Autowired
     private BullsAndCowsGameService service;
+    private Guess guess;
 
-    @GetMapping("/game")
-    public List<Game> getAllGames() {
-        return service.getAllGames();
+    @Autowired
+    public GameController(BullsAndCowsGameService service, Guess guess) {
+        this.service = service;
+        this.guess = guess;
     }
-
+    
     @PostMapping("/begin")
     @ResponseStatus(HttpStatus.CREATED)
-    public int beginGame() {
+    public Game createGame(@RequestBody Optional<Game> game) {
         return service.beginGame();
     }
 
     @PostMapping("/guess")
-    public Round makeGuess(@RequestBody Round round) {
-        Round result = service.guessNumber(round);
-//        return result;
-
-        // this for testing
-//        System.out.println(round.getGuess());
-//        System.out.println(round.getGame().getGameId());
-
-        // TODO:
-        // need to modify game id processing.
-        return result;
+    @ResponseStatus(HttpStatus.CREATED)
+    public Optional<Round> makeGuess(@RequestBody @NonNull Guess guess) {
+        return service.guessNumber(guess.getId(), guess.getNumber());
+    }
+    
+    @GetMapping("/game")
+    public List<Game> getAllGames() {
+        return service.getAllGames();
     }
 
     @GetMapping("/game/{gameId}")

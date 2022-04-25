@@ -11,14 +11,11 @@ import java.util.List;
  */
 public interface RoundDao {
 
-    Round add(Round round);
+    public Round add(Round round);
 
-    List<Round> getAllRounds();
+    public List<Round> getAllRounds();
 
-    // added by JH
-    Round add(Game game, Round round);
+    public List<Round> getAllRoundsByGameId(int gameId);
 
-    List<Round> getAllRoundsByGameId(int gameId);
-
-    Round getRoundById(int id);
+    public Round getRoundById(int id);
 }

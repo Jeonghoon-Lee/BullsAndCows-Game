@@ -10,6 +10,8 @@ import com.m3.bullsncows.dao.GameDao;
 import com.m3.bullsncows.dao.RoundDao;
 
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Optional;
 import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,53 +23,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class BullsAndCowsGameServiceImpl implements BullsAndCowsGameService {
 
-    @Autowired
-    private GameDao gameDao;
+    private final GameDao gameDao;
+    private final RoundDao roundDao;
 
     @Autowired
-    private RoundDao roundDao;
-
-    private Random randomize;
-
-    public BullsAndCowsGameServiceImpl() {
-        this.randomize = new Random();
-    }
-
-    @Override
-    public List<Game> getAllGames() {
-        return gameDao.getAllGames();
-    }
-
-    @Override
-    public int beginGame() {
-        Game newGame = new Game();
-        newGame = gameDao.add(newGame);
-
-        // TODO:
-        // need to change type of answer to char(4)
-        newGame.setAnswer(randomize.nextInt(10000));
-
-        return newGame.getGameId();
-    }
-
-    @Override
-    public Round guessNumber(Round round) {
-        Game game = gameDao.getGameById(round.getGame().getGameId());
-
-        if (game == null) {
-            return null;
-        }
-
-        // increase round number in game
-        game.setCurrentRoundNumber(game.getCurrentRoundNumber() + 1);
-
-        // set round number
-        round.setRoundNumber(game.getCurrentRoundNumber());
-
-        // TODO:
-        // check answer and generate response
-        // need to create help method to compare answer
-        return round;
+    public BullsAndCowsGameServiceImpl(GameDao gameDao, RoundDao roundDao) {
+        this.gameDao = gameDao;
+        this.roundDao = roundDao;
     }
 
     @Override
@@ -76,7 +38,84 @@ public class BullsAndCowsGameServiceImpl implements BullsAndCowsGameService {
     }
 
     @Override
+    public List<Game> getAllGames() {
+        return gameDao.getAllGames();
+    }
+
+    @Override
+    public Game beginGame() {
+        Game newGame = new Game();
+        String randString = "";
+
+        // to generate 4 distincts random numbers between 0 inclusive and 4 exclusive
+        List<Integer> randoms = new ArrayList<>(); // Set would be better
+        Random rand = new Random();
+        while (randoms.size() < 5) {
+            Integer gen = rand.nextInt(10);
+            if (!randoms.contains(gen)) {
+                randoms.add(gen);
+            }
+        }
+        for (Integer random : randoms) {
+            randString += random;
+        }
+
+        newGame.setAnswer(randString);
+        newGame.setStatus("IN PROGRESS");
+        newGame = gameDao.add(newGame);
+
+        return newGame;
+    }
+
+    @Override
+    public Optional<Round> guessNumber(int gameId, Integer guess) {
+    
+        Round round = new Round();
+        Game game = gameDao.getGameById(gameId);
+        if (game != null) {
+            round.setGuess(guess);
+
+            if (game.getAnswer().equals(round.getGuess().toString())) {
+                game.setStatus("FINISHED");
+                game.toString();
+            }
+        }
+
+        if (game != null && game.getStatus().equals("IN PROGRESS")) {
+            String result = matchChar(game.getAnswer(), round.getGuess().toString());
+            round.setResult(result);
+        }
+
+        return Optional.ofNullable(round);
+    }
+
+    @Override
     public List<Round> getRoundsByGameId(int gameId) {
         return roundDao.getAllRoundsByGameId(gameId);
+    }
+
+//    public String validateGuess(Round round, Game game) {
+//        String res = "";
+//
+//        return res;
+//    }
+
+    public String matchChar(String answer, String response) {
+        String result = "";
+        if (answer.equals(response)) {
+            result = "e e e e";
+        } else {
+            for (int i = 0; i < answer.length(); i++) {
+
+                if (answer.substring(i, i + 1).equals(response.substring(i, i + 1))) {
+                    result += "e ";
+                } else if (answer.contains(response.substring(i, i+1))) {
+                    result += "p ";
+                } else {
+                    result += "n ";
+                }
+            }
+        }
+        return result;
     }
 }

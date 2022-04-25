@@ -1,4 +1,5 @@
 package com.m3.bullsncows.dto;
+import java.time.LocalDateTime;
 
 /**
  * @author Ronald Gedeon; email: gedemarcel0002@hotmail.com;
@@ -6,35 +7,51 @@ package com.m3.bullsncows.dto;
  * Design of a class ... on month day, year
  */
 public class Round {
-    private int roundId;
-    private int roundNumber;
-    private int guess;
-
-    // JH
+    private int id;
+    //private int roundNumber;
+    private Integer guess;
+    private LocalDateTime timestamp = LocalDateTime.now();
+    private String result;
     private Game game;
 
-    public int getRoundId() {
-        return roundId;
+    public int getId() {
+        return id;
     }
 
-    public void setRoundId(int roundId) {
-        this.roundId = roundId;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public int getRoundNumber() {
-        return roundNumber;
-    }
+//    public int getRoundNumber() {
+//        return roundNumber;
+//    }
+//
+//    public void setRoundNumber(int roundNumber) {
+//        this.roundNumber = roundNumber;
+//    }
 
-    public void setRoundNumber(int roundNumber) {
-        this.roundNumber = roundNumber;
-    }
-
-    public int getGuess() {
+    public Integer getGuess() {
         return guess;
     }
 
-    public void setGuess(int guess) {
+    public void setGuess(Integer guess) {
         this.guess = guess;
+    }
+
+    public LocalDateTime getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
+    }
+    
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
     }
 
     public Game getGame() {

@@ -4,26 +4,22 @@ create database guessNumberDB;
 use guessNumberDB;
 
 create table game (
-	gameId int auto_increment primary key,
-	answer int not null,
-    currentRoundNumber int default(0),
-    status tinyint default(0)
-)
-;
+	id int primary key auto_increment,
+	answer VARCHAR(15) not null,
+    status VARCHAR(15)
+);
 
 create table round (
-	roundId int auto_increment primary key,
-    roundNumber int not null,
+	id int primary key auto_increment,
     guess int not null,
+    `timestamp` DATETIME,
+    result VARCHAR(15),
     gameId int not null,
-    --
-    constraint fk_game_round foreign key (gameId) references game(gameId)
-)
-;
+    foreign key (gameId) references game(id)
+);
 
 -- for testing
--- insert into game (gameId, answer) values (1, 1234);
+-- insert into game (id, answer, status) values (1, "1234", "IN PROGRESS");
 -- select * from game;
-
--- insert into round (guess, gameId, roundNumber) values (1234, 1, 1);
+-- insert into round (id, guess, `timestamp`, result, gameId) values (1, 5678, now(), "1234", 1);
 -- select * from round;

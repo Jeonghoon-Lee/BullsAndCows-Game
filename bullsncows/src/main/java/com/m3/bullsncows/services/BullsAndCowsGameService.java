@@ -7,6 +7,7 @@ package com.m3.bullsncows.services;
 import com.m3.bullsncows.dto.Game;
 import com.m3.bullsncows.dto.Round;
 import java.util.List;
+import java.util.Optional;
 
 /**
  *
@@ -14,13 +15,13 @@ import java.util.List;
  */
 public interface BullsAndCowsGameService {
 
-    List<Game> getAllGames();
+    public List<Game> getAllGames();
 
-    int beginGame();
+    public Game beginGame();
 
-    Round guessNumber(Round round);
+    public Optional<Round> guessNumber(int gameId, Integer guess);
 
-    Game getGameById(int gameId);
+    public Game getGameById(int gameId);
 
-    List<Round> getRoundsByGameId(int gameId);
+    public List<Round> getRoundsByGameId(int gameId);
 }
