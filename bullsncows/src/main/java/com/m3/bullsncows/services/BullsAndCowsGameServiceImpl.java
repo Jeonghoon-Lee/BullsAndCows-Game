@@ -86,7 +86,7 @@ public class BullsAndCowsGameServiceImpl implements BullsAndCowsGameService {
             String result = matchChar(game.getAnswer(), round.getGuess().toString());
             round.setResult(result);
         }
-
+        roundDao.add(round);
         return Optional.ofNullable(round);
     }
 
