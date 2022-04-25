@@ -13,7 +13,7 @@ public class Round {
     @JsonIgnore
     private int id;
     //private int roundNumber;
-    private Integer guess;
+    private String guess;
     private LocalDateTime timestamp = LocalDateTime.now();
     private String result;
 
@@ -28,11 +28,11 @@ public class Round {
         this.id = id;
     }
 
-    public Integer getGuess() {
+    public String getGuess() {
         return guess;
     }
 
-    public void setGuess(Integer guess) {
+    public void setGuess(String guess) {
         this.guess = guess;
     }
 

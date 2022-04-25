@@ -68,22 +68,23 @@ public class BullsAndCowsGameServiceImpl implements BullsAndCowsGameService {
     }
 
     @Override
-    public Optional<Round> guessNumber(int gameId, int guess) {
+    public Optional<Round> guessNumber(int gameId, String guess) {
 
         Round round = new Round();
         Game game = gameDao.getGameById(gameId);
         if (game != null) {
-            round.setGuess((Integer) guess);
+            round.setGuess(guess);
             round.setGame(game);
 
-            if (game.getAnswer().equals(round.getGuess().toString())) {
+            if (game.getAnswer().equals(round.getGuess())) {
                 game.setStatus("FINISHED");
                 game.toString();
             }
         }
 
         if (game != null && game.getStatus().equals("IN PROGRESS")) {
-            String result = matchChar(game.getAnswer(), round.getGuess().toString());
+            //String result = checkAnswer(game.getAnswer(), round.getGuess());
+            String result = matchChar(game.getAnswer(), round.getGuess());
             round.setResult(result);
         }
         roundDao.add(round);
@@ -106,7 +107,7 @@ public class BullsAndCowsGameServiceImpl implements BullsAndCowsGameService {
             result = "e e e e"; //e: exact
         } else {
             int len = answer.length();
-            for (int i = 0; i < len - 1; i++) { // len -1: to avoid StringIndexOutOfBound
+            for (int i = 0; i < len - 1; i++) { // len - 1: to avoid StringIndexOutOfBound
 
                 if (answer.substring(i, i + 1).equals(response.substring(i, i + 1))) {
                     result += "e ";
@@ -121,21 +122,6 @@ public class BullsAndCowsGameServiceImpl implements BullsAndCowsGameService {
         return result;
     }
 
-    // Generate a 4-digit number where every digit is different.
-    private String generateRandomAnswer() {
-        final int MAX_DIGIT = 4;
-        StringBuilder str = new StringBuilder();
-
-        while (str.length() < MAX_DIGIT) {
-            Integer number = randomizer.nextInt(10);
-            // Check if the generated number doesn't exist
-            if (str.indexOf(number.toString()) < 0) {
-                str.append(number);
-            }
-        }
-        return str.toString();
-    }
-
     // compare answer and user's game
     // return result string
     private String checkAnswer(String answer, String guess) {
@@ -148,10 +134,12 @@ public class BullsAndCowsGameServiceImpl implements BullsAndCowsGameService {
         // the correct digit but in the wrong position.
         int partialMatches = 0;
 
-        for (int i = 0; i < guess.length(); i++) {
+        for (int i = 0; i < guess.length() -1; i++) {
             if (guess.charAt(i) == answer.charAt(i)) {
                 exactMatches++;
             } else if (answer.contains(guess.substring(i, i + 1))) {
+                partialMatches++;
+            } else if(answer.contains(guess.substring(i))) {
                 partialMatches++;
             }
         }

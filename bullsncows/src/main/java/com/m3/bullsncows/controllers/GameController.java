@@ -44,7 +44,7 @@ public class GameController {
     @PostMapping("/guess")
     @ResponseStatus(HttpStatus.CREATED)
     public Optional<Round> makeGuess(@RequestBody @NonNull GuessModel guessModel) {
-        return service.guessNumber(guessModel.getId(), guessModel.getNumber());
+        return service.guessNumber(guessModel.getId(), guessModel.getStringifyNumber());
     }
 //    public ResponseEntity<Round> makeGuess(@RequestBody Round round) {
 //        Round result = service.guessNumber(round);

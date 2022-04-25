@@ -19,7 +19,7 @@ public interface BullsAndCowsGameService {
 
     public Game beginGame();
 
-    public Optional<Round> guessNumber(int gameId, int guess);
+    public Optional<Round> guessNumber(int gameId, String guess);
 
 //    public Round guessNumber(Round round);
 

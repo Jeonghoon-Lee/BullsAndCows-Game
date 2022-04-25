@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class GuessModel {
     private int id;
-    private int number;
+    private String stringifyNumber;
 
     public int getId() {
         return id;
@@ -20,12 +20,12 @@ public class GuessModel {
         this.id = id;
     }
 
-    public int getNumber() {
-        return number;
+    public String getStringifyNumber() {
+        return stringifyNumber;
     }
 
-    public void setNumber(int number) {
-        this.number = number;
+    public void setStringifyNumber(String stringifyNumber) {
+        this.stringifyNumber = stringifyNumber;
     }
     
 }

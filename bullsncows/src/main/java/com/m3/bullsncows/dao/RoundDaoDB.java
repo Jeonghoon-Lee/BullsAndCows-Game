@@ -38,7 +38,7 @@ public class RoundDaoDB implements RoundDao {
         public Round mapRow(ResultSet rs, int index) throws SQLException {
             Round round = new Round();
             round.setId(rs.getInt("id"));
-            round.setGuess(rs.getInt("guess"));
+            round.setGuess(rs.getString("guess"));
             round.setTimestamp(rs.getTimestamp("timestamp").toLocalDateTime());
             round.setResult(rs.getString("result"));
             return round;
@@ -57,7 +57,7 @@ public class RoundDaoDB implements RoundDao {
                     sql,
                     Statement.RETURN_GENERATED_KEYS);
 
-            statement.setInt(1, round.getGuess());
+            statement.setString(1, round.getGuess());
             statement.setTimestamp(2, java.sql.Timestamp.valueOf(round.getTimestamp()));
             statement.setString(3, round.getResult());
             statement.setInt(4, round.getGame().getId());
