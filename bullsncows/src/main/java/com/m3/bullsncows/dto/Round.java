@@ -1,4 +1,6 @@
 package com.m3.bullsncows.dto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.time.LocalDateTime;
 
 /**
@@ -7,11 +9,15 @@ import java.time.LocalDateTime;
  * Design of a class ... on month day, year
  */
 public class Round {
+
+    @JsonIgnore
     private int id;
     //private int roundNumber;
     private Integer guess;
     private LocalDateTime timestamp = LocalDateTime.now();
     private String result;
+
+    @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
     private Game game;
 
     public int getId() {
@@ -45,7 +51,7 @@ public class Round {
     public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
     }
-    
+
     public String getResult() {
         return result;
     }

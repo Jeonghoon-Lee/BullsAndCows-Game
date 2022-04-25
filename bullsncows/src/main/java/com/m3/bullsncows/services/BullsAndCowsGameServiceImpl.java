@@ -8,11 +8,13 @@ import com.m3.bullsncows.dto.Game;
 import com.m3.bullsncows.dto.Round;
 import com.m3.bullsncows.dao.GameDao;
 import com.m3.bullsncows.dao.RoundDao;
+import com.m3.bullsncows.exceptions.GameNotFoundException;
 
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Random;
+import static java.util.stream.Collectors.toList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +28,8 @@ public class BullsAndCowsGameServiceImpl implements BullsAndCowsGameService {
     private final GameDao gameDao;
     private final RoundDao roundDao;
 
+    private Random randomizer = new Random();
+
     @Autowired
     public BullsAndCowsGameServiceImpl(GameDao gameDao, RoundDao roundDao) {
         this.gameDao = gameDao;
@@ -34,37 +38,57 @@ public class BullsAndCowsGameServiceImpl implements BullsAndCowsGameService {
 
     @Override
     public Game getGameById(int gameId) {
-        return gameDao.getGameById(gameId);
+//        return gameDao.getGameById(gameId);
+        Game foundGame = gameDao.getGameById(gameId);
+
+        foundGame = hideAnswer(foundGame);
+
+        // check if game id exists.
+        if (foundGame == null) {
+            throw new GameNotFoundException(gameId);
+        }
+
+        return foundGame;
     }
 
     @Override
     public List<Game> getAllGames() {
-        return gameDao.getAllGames();
+//        return gameDao.getAllGames();
+        return gameDao.getAllGames().stream()
+                .map(game -> hideAnswer(game))
+                .collect(toList());
     }
 
     @Override
     public Game beginGame() {
         Game newGame = new Game();
-        String randString = "";
+//        String randString = "";
+//
+//        // to generate 4 distincts random numbers between 0 inclusive and 4 exclusive
+//        List<Integer> randoms = new ArrayList<>(); // Set would be better
+//        Random rand = new Random();
+//        while (randoms.size() < 5) {
+//            Integer gen = rand.nextInt(10);
+//            if (!randoms.contains(gen)) {
+//                randoms.add(gen);
+//            }
+//        }
+//        for (Integer random : randoms) {
+//            randString += random;
+//        }
+//        newGame.setAnswer(randString);
+//        newGame.setStatus("IN PROGRESS");
+//        newGame = gameDao.add(newGame);
+//
+//        return newGame;
 
-        // to generate 4 distincts random numbers between 0 inclusive and 4 exclusive
-        List<Integer> randoms = new ArrayList<>(); // Set would be better
-        Random rand = new Random();
-        while (randoms.size() < 5) {
-            Integer gen = rand.nextInt(10);
-            if (!randoms.contains(gen)) {
-                randoms.add(gen);
-            }
-        }
-        for (Integer random : randoms) {
-            randString += random;
-        }
+        // generate an answer
+        newGame.setAnswer(generateRandomAnswer());
 
-        newGame.setAnswer(randString);
-        newGame.setStatus("IN PROGRESS");
-        newGame = gameDao.add(newGame);
+        // add to db with DAO
+        Game gameFromDao = gameDao.add(newGame);
 
-        return newGame;
+        return hideAnswer(gameFromDao);
     }
 
     @Override
@@ -74,7 +98,7 @@ public class BullsAndCowsGameServiceImpl implements BullsAndCowsGameService {
         Game game = gameDao.getGameById(gameId);
         if (game != null) {
             round.setGuess((Integer) guess);
-            round.setGame(game); 
+            round.setGame(game);
 
             if (game.getAnswer().equals(round.getGuess().toString())) {
                 game.setStatus("FINISHED");
@@ -92,6 +116,11 @@ public class BullsAndCowsGameServiceImpl implements BullsAndCowsGameService {
 
     @Override
     public List<Round> getRoundsByGameId(int gameId) {
+        // check if game id exists.
+        if (gameDao.getGameById(gameId) == null) {
+            throw new GameNotFoundException(gameId);
+        }
+
         return roundDao.getAllRoundsByGameId(gameId);
     }
 
@@ -119,5 +148,51 @@ public class BullsAndCowsGameServiceImpl implements BullsAndCowsGameService {
             }
         }
         return result;
+    }
+
+    // Generate a 4-digit number where every digit is different.
+    private String generateRandomAnswer() {
+        final int MAX_DIGIT = 4;
+        StringBuilder str = new StringBuilder();
+
+        while (str.length() < MAX_DIGIT) {
+            Integer number = randomizer.nextInt(10);
+            // Check if the generated number doesn't exist
+            if (str.indexOf(number.toString()) < 0) {
+                str.append(number);
+            }
+        }
+        return str.toString();
+    }
+
+    // compare answer and user's game
+    // return result string
+    private String checkAnswer(String answer, String guess) {
+
+        // An exact match occurs when the user guesses
+        // the correct digit in the correct position.
+        int exactMatches = 0;
+
+        // A partial match occurs when the user guesses
+        // the correct digit but in the wrong position.
+        int partialMatches = 0;
+
+        for (int i = 0; i < guess.length(); i++) {
+            if (guess.charAt(i) == answer.charAt(i)) {
+                exactMatches++;
+            } else if (answer.contains(guess.substring(i, i + 1))) {
+                partialMatches++;
+            }
+        }
+        // "e" stands for exact matches and "p" stands for partial matches.
+        return String.format("e:%d:p:%d", exactMatches, partialMatches);
+    }
+
+    // if game is not finished, set answer to null
+    private Game hideAnswer(Game game) {
+        if (game != null && !game.getStatus().equals("FINISHED")) {
+            game.setAnswer(null);
+        }
+        return game;
     }
 }

@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -41,7 +42,7 @@ public class GameDaoDB implements GameDao {
             return game;
         }
     }
-       
+
     @Override
     public Game add(Game game) {
 
@@ -51,7 +52,7 @@ public class GameDaoDB implements GameDao {
         jdbcTemplate.update((Connection conn) -> {
 
             PreparedStatement statement = conn.prepareStatement(
-                sql, 
+                sql,
                 Statement.RETURN_GENERATED_KEYS);
 
             statement.setString(1, game.getAnswer());
@@ -76,7 +77,11 @@ public class GameDaoDB implements GameDao {
         final String sql = "SELECT id, answer, status "
                 + "FROM game WHERE id = ?;";
 
-        return jdbcTemplate.queryForObject(sql, new GameMapper(), id);
+        // game id not exist
+        try {
+            return jdbcTemplate.queryForObject(sql, new GameMapper(), id);
+        } catch (EmptyResultDataAccessException ex) {
+            return null;
+        }
     }
-
 }

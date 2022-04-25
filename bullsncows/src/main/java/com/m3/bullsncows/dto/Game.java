@@ -1,14 +1,16 @@
 package com.m3.bullsncows.dto;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.util.List;
 
 /**
- * @author Ronald Gedeon; email: gedemarcel0002@hotmail.com;  
- * gitRepo: https://github.com/gedegithub/C223-JavaDev.git 
+ * @author Ronald Gedeon; email: gedemarcel0002@hotmail.com;
+ * gitRepo: https://github.com/gedegithub/C223-JavaDev.git
  * Design of a class ... on month day, year
  */
 public class Game {
     private int id;
-   // private int currentRoundNumber;
+    // private int currentRoundNumber;
+    @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
     private String answer;
     private String status = "IN PROGRESS";
 

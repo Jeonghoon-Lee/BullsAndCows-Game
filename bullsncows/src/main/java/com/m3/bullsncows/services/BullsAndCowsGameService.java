@@ -21,6 +21,8 @@ public interface BullsAndCowsGameService {
 
     public Optional<Round> guessNumber(int gameId, int guess);
 
+//    public Round guessNumber(Round round);
+
     public Game getGameById(int gameId);
 
     public List<Round> getRoundsByGameId(int gameId);

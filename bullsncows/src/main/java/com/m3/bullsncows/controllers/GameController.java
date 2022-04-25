@@ -34,7 +34,7 @@ public class GameController {
         this.service = service;
         this.guess = guess;
     }
-    
+
     @PostMapping("/begin")
     @ResponseStatus(HttpStatus.CREATED)
     public Game createGame(@RequestBody Optional<Game> game) {
@@ -46,7 +46,14 @@ public class GameController {
     public Optional<Round> makeGuess(@RequestBody @NonNull GuessModel guessModel) {
         return service.guessNumber(guessModel.getId(), guessModel.getNumber());
     }
-    
+//    public ResponseEntity<Round> makeGuess(@RequestBody Round round) {
+//        Round result = service.guessNumber(round);
+//        if (result == null) {
+//            return new ResponseEntity(null, HttpStatus.BAD_REQUEST);
+//        }
+//        return ResponseEntity.ok(result);
+//    }
+
     @GetMapping("/game")
     public List<Game> getAllGames() {
         return service.getAllGames();
